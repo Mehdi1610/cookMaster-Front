@@ -1,1 +1,40 @@
-<p>login works!</p>
+<div class="max-h-screen flex items-start justify-center lg:items-center p-4 mt-[5%]"> 
+    <div class="bg-white rounded-lg pb-1 w-full lg:w-[1024px] lg:mt-0 border-gray-500 shadow-[0_10px_20px_rgba(0,0,0,0.1)]">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="p-fluid mt-5 mb-5 lg:mb-0">
+                <br>
+                <p class="mb-2 text-2xl font-medium text-center mt-0">👨‍🍳 Welcome back, chef !</p>
+                <p class="text-600 mb-10 text-center lg:mt-0">Log in to find, save and cook your favorite recipes</p>
+                <div class="p-field justify-items-center mb-10">
+                    <p-iftalabel class="w-6/7">
+                        <input pInputText id="email" formControlName="email" autocomplete="off" class="max-h-[50px]" fluid />
+                        <label for="email">Email</label>
+                    </p-iftalabel>
+                </div>
+                <div class="p-field justify-items-center">
+                    <p-iftalabel class="w-6/7">
+                        <p-password class="max-h-[50px]" id="password" formControlName="password" [toggleMask]="true" [feedback]="false" fluid />
+                        <label for="password">Password</label>
+                    </p-iftalabel>  
+                </div>
+                <div class="w-full text-right mt-4">
+                    <a routerLink="/auth/forgot-password" class="text-orange-500 mr-[7.5%]">Forgot password ?</a>
+                </div>
+                <div class="flex justify-center w-full mt-5 px-8">
+                    <p-button 
+                        aria-label="submit" 
+                        type="submit" 
+                        [disabled]="loginForm.invalid" 
+                        label="Login" 
+                        severity="warn" 
+                        styleClass="w-full rounded-lg justify-center"
+                    />
+                </div>
+            </div>
+        </form>
+        <p-divider type="solid"></p-divider>
+        <div class="mb-3">
+            <p class="text-center">New to cookMaster? <a routerLink="/auth/sign-up" class="text-orange-500 font-medium">Create an account !</a></p>
+        </div>
+    </div>
+</div>

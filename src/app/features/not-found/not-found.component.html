@@ -1,20 +1,331 @@
-<section class="min-h-[70vh] w-full grid place-items-center px-4 py-12">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Recette introuvable | cookMaster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FBF2E4;
+    --cream-2: #F5E9D6;
+    --brown: #3E2415;
+    --brown-soft: #6B4A32;
+    --tomato: #E8583A;
+    --tomato-dark: #C8442A;
+    --herb: #7A9B4E;
+    --herb-dark: #5C7A38;
+    --mustard: #E8A83D;
+    --paper: #FFF8EB;
+  }
 
-  <div class="grid gap-10 md:grid-cols items-center max-w-4xl w-full">
+  *{ box-sizing:border-box; }
 
-    <div class="grid place-items-center">
-      <img
-        src="/img/404NotFoundFox.png"
-        alt="404 Not Found"
-        class="
-          w-[70vw]
-          max-w-sm
-          sm:max-w-md
-          md:max-w-lg
-          h-auto
-        "
-      />
-    </div>
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background: var(--cream);
+    font-family:'Nunito', sans-serif;
+    color: var(--brown);
+    overflow-x:hidden;
+  }
 
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 32px 16px;
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    max-width:760px;
+    text-align:center;
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Nunito', sans-serif;
+    font-weight:800;
+    font-size:13px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color: var(--herb-dark);
+    background: #EAF0DC;
+    border: 1.5px solid var(--herb);
+    border-radius:999px;
+    padding:6px 16px;
+    margin-bottom: 18px;
+  }
+
+  h1.code{
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    font-size: clamp(64px, 15vw, 128px);
+    line-height:0.95;
+    margin:0;
+    color: var(--brown);
+    letter-spacing: -0.01em;
+  }
+
+  h1.code .zero{
+    color: var(--tomato);
+    position:relative;
+    display:inline-block;
+  }
+
+  h2.subtitle{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size: clamp(20px, 4vw, 30px);
+    margin: 4px 0 6px;
+    color: var(--brown);
+  }
+
+  p.copy{
+    font-size:16px;
+    font-weight:600;
+    color: var(--brown-soft);
+    max-width: 430px;
+    margin: 0 auto 30px;
+    line-height:1.5;
+  }
+
+  p.copy code{
+    background: var(--cream-2);
+    border: 1px solid #E2D2B4;
+    padding:2px 8px;
+    border-radius:6px;
+    font-family:'Nunito', sans-serif;
+    font-weight:800;
+    color: var(--tomato-dark);
+    font-size:14px;
+  }
+
+  .illustration{
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto 28px;
+  }
+
+  .actions{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .btn{
+    font-family:'Nunito', sans-serif;
+    font-weight:800;
+    font-size:15px;
+    padding: 13px 26px;
+    border-radius: 14px;
+    border: none;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+
+  .btn:focus-visible{
+    outline: 3px solid var(--mustard);
+    outline-offset: 2px;
+  }
+
+  .btn-primary{
+    background: var(--tomato);
+    color: var(--paper);
+    box-shadow: 0 4px 0 var(--tomato-dark);
+  }
+  .btn-primary:hover{ transform: translateY(-2px); }
+  .btn-primary:active{ transform: translateY(2px); box-shadow: 0 1px 0 var(--tomato-dark); }
+
+  .btn-ghost{
+    background: transparent;
+    color: var(--brown);
+    border: 2px solid var(--brown-soft);
+  }
+  .btn-ghost:hover{ background: var(--cream-2); transform: translateY(-2px); }
+
+  .footnote{
+    margin-top: 26px;
+    font-size: 13px;
+    font-weight:700;
+    color: #9C8567;
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .steam{ animation: rise 3.2s ease-in-out infinite; transform-origin: center bottom; }
+    .steam.s2{ animation-delay: .5s; }
+    .steam.s3{ animation-delay: 1s; }
+    @keyframes rise{
+      0%{ opacity:0; transform: translateY(0) scale(0.9); }
+      30%{ opacity:.8; }
+      100%{ opacity:0; transform: translateY(-22px) scale(1.05); }
+    }
+    .wobble{ animation: wobble 4.5s ease-in-out infinite; transform-origin: 50% 100%; }
+    @keyframes wobble{
+      0%,100%{ transform: rotate(0deg); }
+      50%{ transform: rotate(-1.4deg); }
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <span class="eyebrow">cookMaster</span>
+
+  <div class="illustration">
+    <svg viewBox="0 0 640 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Une marmite avec un visage triste tient une carte de recette froissée, entourée d'herbes en pot et de tomates">
+
+      <!-- ground shadow -->
+      <ellipse cx="320" cy="468" rx="230" ry="30" fill="#EADFC6"/>
+
+      <!-- left herb pot -->
+      <g>
+        <path d="M118 420 L132 468 L184 468 L198 420 Z" fill="#C97B4A"/>
+        <path d="M118 420 L198 420 L194 434 L122 434 Z" fill="#A85F35"/>
+        <g fill="var(--herb)">
+          <ellipse cx="130" cy="380" rx="26" ry="34" transform="rotate(-18 130 380)"/>
+          <ellipse cx="160" cy="366" rx="28" ry="38"/>
+          <ellipse cx="190" cy="382" rx="24" ry="32" transform="rotate(16 190 382)"/>
+        </g>
+        <g fill="var(--herb-dark)" opacity="0.5">
+          <ellipse cx="160" cy="366" rx="10" ry="30"/>
+        </g>
+      </g>
+
+      <!-- right herb pot -->
+      <g>
+        <path d="M446 420 L460 468 L512 468 L526 420 Z" fill="#C97B4A"/>
+        <path d="M446 420 L526 420 L522 434 L450 434 Z" fill="#A85F35"/>
+        <g fill="var(--herb)">
+          <ellipse cx="460" cy="378" rx="24" ry="32" transform="rotate(-14 460 378)"/>
+          <ellipse cx="488" cy="364" rx="27" ry="37"/>
+          <ellipse cx="514" cy="380" rx="24" ry="30" transform="rotate(18 514 380)"/>
+        </g>
+      </g>
+
+      <!-- tomatoes on the ground -->
+      <g>
+        <circle cx="500" cy="452" r="15" fill="var(--tomato)"/>
+        <circle cx="500" cy="452" r="15" fill="url(#tomatoShade)"/>
+        <path d="M494 440 q6 -10 12 0" stroke="var(--herb-dark)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>
+      <g>
+        <circle cx="524" cy="462" r="10" fill="var(--tomato)"/>
+        <path d="M519 455 q5 -7 10 0" stroke="var(--herb-dark)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- wooden spoon stuck in ground -->
+      <g transform="rotate(-8 168 452)">
+        <rect x="163" y="410" width="6" height="55" rx="3" fill="#B6793F"/>
+        <ellipse cx="166" cy="406" rx="12" ry="16" fill="#C98C4F"/>
+        <ellipse cx="166" cy="406" rx="7" ry="10" fill="#E0AA6C"/>
+      </g>
+
+      <defs>
+        <radialGradient id="tomatoShade" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#FF8A63" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#E8583A" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- MASCOT: sad pot chef -->
+      <g class="wobble">
+
+        <!-- steam -->
+        <g stroke="#C9BBA4" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.85">
+          <path class="steam s1" d="M292 148 q-10 -16 0 -28 q10 -12 0 -26"/>
+          <path class="steam s2" d="M320 140 q-10 -16 0 -28 q10 -12 0 -26"/>
+          <path class="steam s3" d="M348 148 q-10 -16 0 -28 q10 -12 0 -26"/>
+        </g>
+
+        <!-- chef hat -->
+        <g>
+          <path d="M256 168 q-18 -46 24 -58 q6 -20 30 -20 q24 0 30 20 q42 12 24 58 Z" fill="#FFFDF7" stroke="var(--brown)" stroke-width="6" stroke-linejoin="round"/>
+          <rect x="252" y="160" width="136" height="26" rx="13" fill="#FFFDF7" stroke="var(--brown)" stroke-width="6"/>
+        </g>
+
+        <!-- pot body -->
+        <path d="M228 202 h184 l-14 148 q-2 20 -22 20 h-112 q-20 0 -22 -20 Z"
+              fill="var(--tomato)" stroke="var(--brown)" stroke-width="7" stroke-linejoin="round"/>
+
+        <!-- pot rim -->
+        <rect x="216" y="192" width="208" height="26" rx="13" fill="var(--tomato-dark)" stroke="var(--brown)" stroke-width="7" stroke-linejoin="round"/>
+
+        <!-- pot handles -->
+        <path d="M216 210 q-30 -4 -30 22 q0 22 26 20" fill="none" stroke="var(--brown)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M424 210 q30 -4 30 22 q0 22 -26 20" fill="none" stroke="var(--brown)" stroke-width="7" stroke-linecap="round"/>
+
+        <!-- face patch -->
+        <ellipse cx="320" cy="278" rx="66" ry="52" fill="var(--paper)"/>
+
+        <!-- worried eyebrows -->
+        <path d="M276 254 q16 -14 34 -4" stroke="var(--brown)" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M364 254 q-16 -14 -34 -4" stroke="var(--brown)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+        <!-- eyes -->
+        <path d="M290 270 q10 8 20 0" stroke="var(--brown)" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M330 270 q10 8 20 0" stroke="var(--brown)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+        <!-- nose -->
+        <ellipse cx="320" cy="286" rx="7" ry="5" fill="var(--brown-soft)"/>
+
+        <!-- mouth: worried wobble -->
+        <path d="M298 306 q10 -10 22 0 q10 -10 22 0" stroke="var(--brown)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+        <!-- little cheek blush -->
+        <ellipse cx="280" cy="292" rx="9" ry="6" fill="#F4A388" opacity="0.6"/>
+        <ellipse cx="360" cy="292" rx="9" ry="6" fill="#F4A388" opacity="0.6"/>
+
+        <!-- arms -->
+        <path d="M236 330 q-34 10 -40 44" stroke="var(--brown)" stroke-width="16" fill="none" stroke-linecap="round"/>
+        <path d="M404 330 q34 10 40 44" stroke="var(--brown)" stroke-width="16" fill="none" stroke-linecap="round"/>
+        <circle cx="192" cy="380" r="16" fill="var(--brown)"/>
+        <circle cx="448" cy="380" r="16" fill="var(--brown)"/>
+
+        <!-- legs -->
+        <rect x="252" y="366" width="26" height="40" rx="10" fill="var(--brown)"/>
+        <rect x="362" y="366" width="26" height="40" rx="10" fill="var(--brown)"/>
+
+        <!-- recipe card held in front -->
+        <g transform="rotate(-5 320 372)">
+          <rect x="236" y="330" width="168" height="112" rx="8" fill="var(--paper)" stroke="var(--brown)" stroke-width="6" stroke-linejoin="round"/>
+          <line x1="256" y1="356" x2="330" y2="356" stroke="#D8C7A6" stroke-width="5" stroke-linecap="round"/>
+          <line x1="256" y1="374" x2="360" y2="374" stroke="#D8C7A6" stroke-width="5" stroke-linecap="round"/>
+          <line x1="256" y1="392" x2="310" y2="392" stroke="#D8C7A6" stroke-width="5" stroke-linecap="round"/>
+          <text x="356" y="422" font-family="Fredoka, sans-serif" font-weight="700" font-size="34" fill="var(--tomato)" text-anchor="middle">?</text>
+        </g>
+      </g>
+    </svg>
   </div>
-</section>
+
+  <h1 class="code">4<span class="zero">0</span>4</h1>
+  <h2 class="subtitle">Recette introuvable</h2>
+  <p class="copy">
+    On a fouillé tout le livre de cuisine, mais cette page a dû tomber
+    au fond de la marmite. Retournez aux fourneaux, la recette que vous
+    cherchez y est peut-être.
+  </p>
+
+  <div class="actions">
+    <a class="btn btn-primary" href="/" aria-label="Retour à l'accueil de cookMaster">
+      🍳 Retour à la cuisine
+    </a>
+  </div>
+
+  <p class="footnote">cookMaster — erreur 404</p>
+</div>
+
+</body>
+</html>
