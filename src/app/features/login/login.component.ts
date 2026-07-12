@@ -38,14 +38,13 @@ export class LoginComponent implements OnInit {
 
                   this.router.navigate(['/'])},
                 error: (err: HttpErrorResponse) => {
-                      console.log('LOGIN error - navigating...');
-
                     if (err.status === 401) {
                         this.toastService.error(
                             'Login Failed',
                             'Invalid email or password',
                         );
                     } else {
+                        console.log("gferjogmijezrtomigejzromigezjroimg"),
                         this.toastService.error(
                             'Login Failed',
                             'An unexpected error occurred. Please try again later',

@@ -1,1 +1,52 @@
-<p>sign-up.component works!</p>
+<div class="max-h-screen flex items-start justify-center lg:items-center p-4 mt-[5%]"> 
+    <div class="bg-white rounded-lg pb-1 w-full lg:w-[1024px] lg:mt-0 border-gray-500 shadow-[0_10px_20px_rgba(0,0,0,0.1)]">
+        <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+            <div class="p-fluid mt-5 mb-5 lg:mb-0">
+                <br>
+                <p class="mb-2 text-2xl font-medium text-center mt-0">🧑‍🍳 Join cookMaster !</p>
+                <p class="text-600 mb-10 text-center lg:mt-0">Create your account and start sharing your recipes</p>
+                <div class="p-field justify-items-center mb-10">
+                    <p-iftalabel class="w-6/7">
+                        <input pInputText id="username" formControlName="username" autocomplete="off" class="max-h-[50px]" fluid />
+                        <label for="username">Username</label>
+                         @if (isInvalid('username')) {
+                        <p-message severity="error" size="small" variant="simple">Username is required.</p-message>
+                        } 
+                    </p-iftalabel>
+                </div>
+                <div class="p-field justify-items-center mb-10">
+                    <p-iftalabel class="w-6/7">
+                        <input pInputText id="email" formControlName="email" autocomplete="off" class="max-h-[50px]" fluid />
+                        <label for="email">Email</label>
+                         @if (isInvalid('email')) {
+                            <p-message severity="error" size="small" variant="simple">Email is required.</p-message>
+                            }
+                    </p-iftalabel>
+                </div>
+                <div class="p-field justify-items-center">
+                    <p-iftalabel class="w-6/7">
+                        <p-password class="max-h-[50px]" id="password" formControlName="password" [toggleMask]="true" [feedback]="true" fluid />
+                        <label for="password">Password</label>
+                        @if (isInvalid('password')) {
+                            <p-message severity="error" size="small" variant="simple">Password is invalid.</p-message>
+                            }
+                    </p-iftalabel>  
+                </div>
+                <div class="flex justify-center w-full mt-8 px-8">
+                    <p-button 
+                        aria-label="submit" 
+                        type="submit" 
+                        [disabled]="signUpForm.invalid" 
+                        label="Create account" 
+                        severity="warn" 
+                        styleClass="w-full rounded-lg justify-center"
+                    />
+                </div>
+            </div>
+        </form>                                                                                                                                                                                                                              
+        <p-divider type="solid"></p-divider>
+        <div class="mb-3">
+            <p class="text-center">Already have an account? <a routerLink="/auth/login" class="text-orange-500 font-medium">Log in here !</a></p>
+        </div>
+    </div>
+</div>

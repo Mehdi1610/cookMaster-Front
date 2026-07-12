@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 import { User } from '../../../models/user.models';
 import { JwtToken } from '../../../models/jwt-token.model';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
+import { RegisterRequest } from '../../../models/registerRequest.model';
 
 const TOKEN_STORAGE_KEY = 'jwtToken';
 
@@ -65,7 +66,31 @@ export class AuthService {
     public hasRefreshToken(): boolean {
         return this.jwtToken?.refreshToken != null;
     }
+
+    public refreshToken(): Observable<string | null> {
+        const body = { refreshToken: this.jwtToken?.refreshToken };
+
+        return this.httpClient.post<JwtToken>(`${this.url}/refresh`, body).pipe(
+            tap((newToken) => {
+                this.jwtToken = newToken;
+                this.saveTokenToStorage(newToken);
+            }),
+            map((newToken) => newToken.accessToken),
+            catchError((err: HttpErrorResponse) => {
+                console.log(
+                    `Token refresh failed: ${err.message} (Status: ${err.status})`,
+                );
+                this.logout();
+                return of(null);
+            }),
+        );
+    }
     
+    public register(registerRequest: RegisterRequest): Observable<User> {
+        return this.httpClient.post<User>(`${this.url}/auth/register`, {
+            ...registerRequest,
+        });
+    }
   public logout(): void {
         this.httpClient.post<void>(`${this.url}/logout`, null)
         .subscribe();
