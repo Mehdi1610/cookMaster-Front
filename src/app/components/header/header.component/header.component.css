@@ -1,0 +1,23 @@
+:host ::ng-deep .p-toolbar {
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Le toolbar PrimeNG passe en colonne par défaut sur petit écran, 
+   on force le layout en ligne pour garder logo + actions alignés */
+:host ::ng-deep .p-toolbar-group-start,
+:host ::ng-deep .p-toolbar-group-end {
+    flex: 0 0 auto;
+}
+:host {
+  display: block;
+}
+
+:host ::ng-deep .p-button-text.p-button-secondary:hover {
+  color: #f97316 !important;
+}
+
+:host ::ng-deep .p-button-text.p-button-secondary:hover .p-icon {
+  color: #f97316 !important;
+}

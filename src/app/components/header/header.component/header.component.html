@@ -1,0 +1,73 @@
+<header class="w-full bg-white border-b border-gray-200 px-10 sm:px-8 lg:px-16">    <p-toolbar styleClass="border-none shadow-none py-3 bg-white">
+
+        <ng-template pTemplate="start">
+            <div class="flex items-center gap-2">
+                <img src="img/chef_food_restaurant__icon.ico" alt="cookMaster" class="w-7 h-7 object-contain" style="filter: invert(56%) sepia(69%) saturate(1878%) hue-rotate(346deg) brightness(101%) contrast(96%);" />
+                <span class="text-lg sm:text-xl font-semibold text-gray-800" style="font-family: 'Poppins', sans-serif;">Cook Master</span>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="center">
+            <!-- Recherche visible en permanence à partir de lg -->
+            <div class="hidden lg:block w-full max-w-md">
+                <p-iconfield class="w-full">
+                    <p-inputicon class="pi pi-search" />
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Rechercher une recette..."
+                        class="w-full rounded-full"
+                        [formControl]="searchControl"
+                        (keyup.enter)="onSearch()"
+                    />
+                </p-iconfield>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="end">
+            <div class="flex items-center gap-1 sm:gap-3">
+
+                <!-- Icône recherche, mobile/tablette uniquement -->
+                <div class="lg:hidden">
+    <p-button
+        icon="pi pi-search"
+        [text]="true"
+        severity="secondary"
+        (onClick)="toggleMobileSearch()"
+        aria-label="Rechercher une recette"
+    />
+</div>
+
+                <!-- Déconnexion : label visible desktop, icône seule sur mobile -->
+                <p-button
+                    icon="pi pi-sign-out"
+                    label="Déconnexion"
+                    [text]="true"
+                    severity="secondary"
+                    styleClass="[&_.p-button-label]:hidden sm:[&_.p-button-label]:inline"
+                    (onClick)="logout()"
+                    aria-label="Déconnexion"
+                />
+            </div>
+        </ng-template>
+
+    </p-toolbar>
+
+    <!-- Barre de recherche mobile, dépliée sous le header -->
+    @if (mobileSearchOpen()) {
+    <div class="lg:hidden px-4 pb-3 mt-2">
+        <p-iconfield class="w-full">
+            <p-inputicon class="pi pi-search" />
+            <input
+                pInputText
+                type="text"
+                placeholder="Rechercher une recette..."
+                class="w-full rounded-full"
+                [formControl]="searchControl"
+                (keyup.enter)="onSearch()"
+                autofocus
+            />
+        </p-iconfield>
+    </div>
+}
+</header>
