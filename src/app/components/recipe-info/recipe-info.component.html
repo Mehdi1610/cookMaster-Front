@@ -1,0 +1,78 @@
+<p-confirmDialog></p-confirmDialog>
+@if (recipe(); as r) {
+    <div class="px-10 sm:px-8 lg:px-16 py-8 max-w-4xl mx-auto">
+
+        <h1 class="text-3xl font-semibold text-gray-800 mb-8">
+            {{ r.title }}
+        </h1>
+
+        <section class="mb-10">
+            <h2 class="text-xl font-semibold text-orange-500 mb-4">Ingrédients</h2>
+            @if (r.ingredients && r.ingredients.length > 0) {
+            <ul class="space-y-2">
+                @for (ingredient of r.ingredients; track ingredient.id) {
+                    <li class="flex items-center justify-between bg-white border border-gray-100 rounded-lg px-4 py-3">
+                        <span class="text-gray-700">{{ ingredient.name }}</span>
+                        <span class="text-sm text-gray-500 font-medium">
+                            {{ ingredient.quantity }} {{ ingredient.unit }}
+                        </span>
+                    </li>
+                }
+            </ul>
+            }@else{
+                    <p class="text-gray-700">Aucun ingredient enregistré pour cette recette</p>
+                }
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold text-orange-500 mb-4">Préparation</h2>
+            @if (r.steps && r.steps.length > 0) {
+            <ol class="space-y-4">
+
+                @for (step of r.steps; track step.id) {
+                    <li class="flex gap-4 bg-white border border-gray-100 rounded-lg px-4 py-4">
+                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-orange-500 text-white text-sm font-semibold">
+                            {{ step.stepNumber }}
+                        </span>
+                        <p class="text-gray-700">{{ step.description }}</p>
+                    </li>
+                }
+            </ol>
+        }@else{
+                    <p class="text-gray-700">Aucune étape enregistrée pour cette recette</p>
+                }
+        </section>
+
+        
+
+            <!-- Actions -->
+    <div
+        class="flex justify-end gap-2 px-4 py-3 border-t border-gray-100 bg-white"
+        (click)="$event.stopPropagation()">
+
+        <p-button
+            icon="pi pi-pencil"
+            label="Modifier"
+            size="small"
+            (onClick)="onEditRecipe()">
+        </p-button>
+
+        <p-button
+            icon="pi pi-trash"
+            label="Supprimer"
+            size="small"
+            [outlined]="true"
+            (onClick)="onDeleteRecipe()">
+        </p-button>
+
+    </div>
+
+    <div class="flex justify-center mt-10">
+            <p-button
+                label="Retour aux recettes"
+                icon="pi pi-arrow-left"
+                [routerLink]="['/']">
+            </p-button>
+            </div>
+    </div>
+}

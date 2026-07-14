@@ -23,4 +23,8 @@ export class RecipeService {
   toggleFavorite(recipeId: string): Observable<void> {
     return this.http.post<void>(`${this.url}/recipe/${recipeId}/favorite`, {});
   }
+
+  delete(recipeId: number): Observable<void>{
+    return this.http.delete<void>(`${this.url}/recipe/${recipeId}`);
+  }
 }

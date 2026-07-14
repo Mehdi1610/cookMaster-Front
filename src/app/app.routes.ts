@@ -5,7 +5,7 @@ import { NotFoundComponent } from './features/not-found/not-found.component';
 import { HomeComponent } from './features/home/home.component';
 import { authGuard } from './core/guards/auth/auth-guard';
 import { noAuthGuard } from './core/guards/no-auth/no-auth-guard';
-import { RecipeInfoComponent } from './components/recipe-info/recipe-info.component/recipe-info.component';
+import { RecipeInfoComponent } from './components/recipe-info/recipe-info.component';
 
 export const routes: Routes = [
     {

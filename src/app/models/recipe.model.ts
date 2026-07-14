@@ -10,7 +10,7 @@ export interface Recipe {
   preparationTime: number; // en minutes, d'après l'exemple
   difficulty: Difficulty;
   imageUrl: string;
-  userId: string;
+  userId: number;
   categoryId: number;
   steps: Step[];
   ingredients: Ingredient[];

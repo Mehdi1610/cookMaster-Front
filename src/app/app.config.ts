@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { cookMasterPreset } from './cookMaster.preset';
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
