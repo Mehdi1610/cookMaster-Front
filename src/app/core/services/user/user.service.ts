@@ -16,9 +16,10 @@ export class UserService {
     public readonly currentUser$: Observable<User | null> =
         this.currentUserSubject.asObservable();
 
+
     public loadCurrentUser(): void {
         this.httpClient
-            .get<User>(`${this.url}/auth/me`)
+            .get<User>(`${this.url}/me`)
             .pipe(tap((user) => this.currentUserSubject.next(user)))
             .subscribe();
     }

@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep .p-select:not(.p-disabled).p-focus,
+:host ::ng-deep .p-multiselect:not(.p-disabled).p-focus {
+  border-color: #f97316 !important;
+  box-shadow: 0 0 0 1px #f97316 !important;
+}

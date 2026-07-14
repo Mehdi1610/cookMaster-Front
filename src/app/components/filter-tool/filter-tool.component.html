@@ -1,0 +1,48 @@
+<div class="w-full bg-white rounded-xl border border-gray-200 shadow-sm px-4 sm:px-6 py-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:flex-wrap gap-4">
+
+        <!-- Catégories -->
+        <p-select
+            [options]="categories()"
+            [(ngModel)]="selectedCategory"
+            (ngModelChange)="onCategoryChange($event)"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Toutes les catégories"
+            styleClass="w-full sm:w-auto sm:min-w-[200px]"
+        />
+
+        <!-- Difficulté -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+            <span class="text-sm font-medium text-orange-500 whitespace-nowrap">Difficulté :</span>
+            <div class="flex flex-wrap items-center gap-2">
+                @for (diff of difficulties; track diff.value) {
+                    <button
+                        type="button"
+                        (click)="toggleDifficulty(diff.value)"
+                        class="px-4 py-1.5 rounded-md text-sm font-medium border transition-colors whitespace-nowrap"
+                        [class.bg-orange-500]="selectedDifficulty() === diff.value"
+                        [class.text-white]="selectedDifficulty() === diff.value"
+                        [class.border-orange-500]="selectedDifficulty() === diff.value"
+                        [class.bg-gray-100]="selectedDifficulty() !== diff.value"
+                        [class.text-gray-600]="selectedDifficulty() !== diff.value"
+                        [class.border-gray-200]="selectedDifficulty() !== diff.value"
+                    >
+                        {{ diff.label }}
+                    </button>
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Réinitialiser -->
+    <button
+        type="button"
+        (click)="resetFilters()"
+        class="flex items-center gap-1.5 mt-3 text-sm text-gray-500 hover:text-orange-500 transition-colors"
+    >
+        <i class="pi pi-refresh text-xs"></i>
+        Réinitialiser les filtres
+    </button>
+</div>

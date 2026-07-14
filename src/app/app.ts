@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { UserService } from './core/services/user/user.service';
-import { HeaderComponent } from './components/header/header.component/header.component';
+import { HeaderComponent } from './components/header/header.component';
 import { filter } from 'rxjs';
 
 @Component({

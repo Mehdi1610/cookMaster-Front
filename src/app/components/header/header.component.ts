@@ -1,9 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, inject, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { User } from '../../../models/user.models';
-import { UserService } from '../../../core/services/user/user.service';
-import { AuthService } from '../../../core/services/auth/auth.service';
+import { User } from '../../models/user.models';
+import { UserService } from '../../core/services/user/user.service';
+import { AuthService } from '../../core/services/auth/auth.service';
 import { Menu } from 'primeng/menu';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -36,6 +36,7 @@ export class HeaderComponent implements OnInit{
 
 
   @Output() search = new EventEmitter<string>();
+  
   user: User | null | undefined;
   searchControl = new FormControl('');
   mobileSearchOpen = signal(false);

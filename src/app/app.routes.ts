@@ -2,9 +2,10 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './features/login/login.component';
 import SignUpComponent from './features/sign-up/sign-up.component';
 import { NotFoundComponent } from './features/not-found/not-found.component';
-import { HomeComponent } from './components/home/home.component/home.component';
+import { HomeComponent } from './features/home/home.component';
 import { authGuard } from './core/guards/auth/auth-guard';
 import { noAuthGuard } from './core/guards/no-auth/no-auth-guard';
+import { RecipeInfoComponent } from './components/recipe-info/recipe-info.component/recipe-info.component';
 
 export const routes: Routes = [
     {
@@ -30,6 +31,9 @@ export const routes: Routes = [
                 pathMatch: 'full',
             }, 
         ],
+    },
+    {
+        path:'recipe/:id', component:RecipeInfoComponent,
     },
     { path: '**',
         component: NotFoundComponent
