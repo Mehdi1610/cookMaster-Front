@@ -5,7 +5,8 @@
     <!-- Image + bouton favori -->
     <div class="relative">
         <img
-            [src]="recipe.imageUrl"
+            [src]="displayImageUrl"
+            (error)="onImageError()"
             [alt]="recipe.title"
             class="w-full h-44 object-cover"
         />

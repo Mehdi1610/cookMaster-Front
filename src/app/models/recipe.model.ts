@@ -1,17 +1,27 @@
-import { Ingredient } from "./ingredient.model";
-import { Step } from "./step.model";
+import { CreateIngredientPayload, Ingredient } from "./ingredient.model";
+import { CreateStepPayload, Step } from "./step.model";
 
 export type Difficulty = 'Facile' | 'Moyen' | 'Difficile';
-export type Unit = 'G' | 'KG' | 'ML' | 'L' | 'CAS' | 'CAC' | 'PIECE' | 'PINCEE';
 
 export interface Recipe {
   id: number;
   title: string;
-  preparationTime: number; // en minutes, d'après l'exemple
+  preparationTime: number; 
   difficulty: Difficulty;
   imageUrl: string;
   userId: number;
   categoryId: number;
   steps: Step[];
   ingredients: Ingredient[];
+}
+
+// --- Payload pour la création de recette (sans id) ---
+
+export interface CreateRecipePayload {
+  title: string;
+  preparationTime: number;
+  difficulty: Difficulty;
+  categoryId: number;
+  steps: CreateStepPayload[];
+  ingredients: CreateIngredientPayload[];
 }

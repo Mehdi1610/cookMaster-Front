@@ -4,3 +4,10 @@ export interface Step{
     stepNumber: number;
 
 }
+
+// --- Payload pour la création de recette (sans id) ---
+
+export interface CreateStepPayload {
+  description: string;
+  stepNumber: number;
+}

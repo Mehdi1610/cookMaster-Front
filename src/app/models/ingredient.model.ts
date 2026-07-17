@@ -1,8 +1,17 @@
-export type Unit= 'g' | 'kg' | 'ml' | 'l' | 'cas' | 'cac' | 'piece' | 'pincee';
+export type Unit= 'G' | 'KG' | 'ML' | 'L' | 'CAS' | 'CAC' | 'PIECE' | 'PINCEE';
+
 
 export interface Ingredient{
     id: number;
     name: string;
     quantity: number;
     unit: Unit;
+}
+
+// --- Payload pour la création de recette (sans id) ---
+
+export interface CreateIngredientPayload {
+  name: string;
+  quantity: number;
+  unit: Unit;
 }

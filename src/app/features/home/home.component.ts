@@ -10,9 +10,10 @@ import { CategoryService } from '../../core/services/category/category.service';
 import { RecipeService } from '../../core/services/recipe/recipe.service';
 import { Recipe } from '../../models/recipe.model';
 import { Router } from '@angular/router';
+import { CreateRecipeComponent } from '../../components/create-recipe/create-recipe.component';
 @Component({
   selector: 'app-home.component',
-  imports: [authCommonImports, NavTabComponent, FilterToolComponent, RecipeCardComponent],
+  imports: [authCommonImports, NavTabComponent, FilterToolComponent, RecipeCardComponent, CreateRecipeComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -58,6 +59,7 @@ ngOnInit(): void {
       this.allRecipes.set(recipes);
     });
 
+    
     this.favoriteService.getAll().subscribe((favorites) => {
       this.favoriteIds.set(new Set(favorites.map((r) => r.id)));
     });
