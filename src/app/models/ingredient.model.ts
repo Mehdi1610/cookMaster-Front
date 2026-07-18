@@ -15,3 +15,10 @@ export interface CreateIngredientPayload {
   quantity: number;
   unit: Unit;
 }
+
+export interface UpdateIngredientPayload {
+  id?: number; 
+  name: string;
+  quantity: number;
+  unit: Unit;
+}

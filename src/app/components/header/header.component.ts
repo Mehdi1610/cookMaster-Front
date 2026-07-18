@@ -48,6 +48,7 @@ export class HeaderComponent implements OnInit{
     });
   }
   
+
    onSearch(): void {
     const value = this.searchControl.value?.trim() ?? '';
     if (value) {

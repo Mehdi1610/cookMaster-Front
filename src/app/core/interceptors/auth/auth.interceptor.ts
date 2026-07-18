@@ -1,5 +1,5 @@
 import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
@@ -7,6 +7,8 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
   const authService = inject(AuthService);
   const token = authService.getAccessToken();
 
+  
+  
   // If the request is to an excluded endpoint or if there's no token, proceed without modifying the request
   if (req.url.includes('/auth/') || !token) {
     return next(req);
@@ -16,6 +18,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
   const authReq = req.clone({
     headers: req.headers.set('Authorization', `Bearer ${token}`)
   });
+  
 
   return next(authReq);
 };

@@ -1,19 +1,20 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { ToastService } from '../../core/services/toast/toast.service';
-import { Difficulty } from '../../models/recipe.model';
-import { Unit } from '../../models/ingredient.model';
 import { RecipeService } from '../../core/services/recipe/recipe.service';
 import { CategoryService } from '../../core/services/category/category.service';
+import { ToastService } from '../../core/services/toast/toast.service';
+import { Difficulty, Recipe } from '../../models/recipe.model';
+import { Unit } from '../../models/ingredient.model';
 
 @Component({
-  selector: 'app-create-recipe',
+  selector: 'app-update-recipe',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -22,22 +23,27 @@ import { CategoryService } from '../../core/services/category/category.service';
     InputTextModule,
     InputNumberModule,
   ],
-  templateUrl: './create-recipe.component.html',
-  styleUrl: './create-recipe.component.css',
+  templateUrl: './update-recipe.component.html',
+  styleUrl: './update-recipe.component.css',
 })
-export class CreateRecipeComponent implements OnInit {
-  private readonly formBuilder = inject(FormBuilder);
+export class UpdateRecipeComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly recipeService = inject(RecipeService);
   private readonly categoryService = inject(CategoryService);
   private readonly toastService = inject(ToastService);
 
+  recipeId!: number;
+
   recipeForm!: FormGroup;
 
   categories = signal<{ label: string; value: number }[]>([]);
+  existingImageUrl = signal<string | null>(null);
   imagePreview = signal<string | null>(null);
   selectedFile = signal<File | null>(null);
   submitting = signal(false);
+  loading = signal(true);
   isDragging = signal(false);
 
   difficulties: { label: string; value: Difficulty }[] = [
@@ -58,40 +64,61 @@ export class CreateRecipeComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.recipeForm = this.formBuilder.group({
-      title: ['', [Validators.required]],
+    this.recipeId = Number(this.route.snapshot.paramMap.get('id'));
+    if (!this.recipeId) {
+      this.router.navigate(['/']);
+      return;
+    }
+
+    this.recipeForm = this.fb.group({
+      title: ['', Validators.required],
       preparationTime: [null, [Validators.required, Validators.min(1)]],
-      difficulty: [null, [Validators.required]],
-      categoryId: [null, [Validators.required]],
-      steps: this.formBuilder.array([this.createStepGroup()]),
-      ingredients: this.formBuilder.array([this.createIngredientGroup()]),
+      difficulty: [null, Validators.required],
+      categoryId: [null, Validators.required],
+      ingredients: this.fb.array([]),
+      steps: this.fb.array([]),
     });
 
     this.categoryService.getAll().subscribe((categories) => {
       this.categories.set(categories.map((c) => ({ label: c.name, value: c.id })));
     });
-  }
 
-  // --- Steps FormArray ---
-
-  get steps(): FormArray {
-    return this.recipeForm.get('steps') as FormArray;
-  }
-
-  private createStepGroup(): FormGroup {
-    return this.formBuilder.group({
-      description: ['', Validators.required],
+    this.recipeService.getById(this.recipeId).subscribe({
+      next: (recipe) => this.populateForm(recipe),
+      error: () => {
+        this.toastService.error('Erreur', 'Impossible de charger la recette');
+        this.router.navigate(['/']);
+      },
     });
   }
 
-  addStep(): void {
-    this.steps.push(this.createStepGroup());
-  }
+  private populateForm(recipe: Recipe): void {
+    this.recipeForm.patchValue({
+      title: recipe.title,
+      preparationTime: recipe.preparationTime,
+      difficulty: recipe.difficulty,
+      categoryId: recipe.categoryId,
+    });
 
-  removeStep(index: number): void {
-    if (this.steps.length > 1) {
-      this.steps.removeAt(index);
+    this.existingImageUrl.set(recipe.imageUrl || null);
+
+    const sortedIngredients = [...recipe.ingredients];
+    sortedIngredients.forEach((ingredient) => {
+      this.ingredients.push(this.createIngredientGroup(ingredient));
+    });
+    if (sortedIngredients.length === 0) {
+      this.ingredients.push(this.createIngredientGroup());
     }
+
+    const sortedSteps = [...recipe.steps].sort((a, b) => a.stepNumber - b.stepNumber);
+    sortedSteps.forEach((step) => {
+      this.steps.push(this.createStepGroup(step));
+    });
+    if (sortedSteps.length === 0) {
+      this.steps.push(this.createStepGroup());
+    }
+
+    this.loading.set(false);
   }
 
   // --- Ingredients FormArray ---
@@ -100,11 +127,12 @@ export class CreateRecipeComponent implements OnInit {
     return this.recipeForm.get('ingredients') as FormArray;
   }
 
-  private createIngredientGroup(): FormGroup {
-    return this.formBuilder.group({
-      name: ['', Validators.required],
-      quantity: [null, [Validators.required, Validators.min(0.1)]],
-      unit: [null, Validators.required],
+  private createIngredientGroup(ingredient?: { id: number; name: string; quantity: number; unit: Unit }): FormGroup {
+    return this.fb.group({
+      id: [ingredient?.id ?? null],
+      name: [ingredient?.name ?? '', Validators.required],
+      quantity: [ingredient?.quantity ?? null, [Validators.required, Validators.min(0.1)]],
+      unit: [ingredient?.unit ?? null, Validators.required],
     });
   }
 
@@ -118,9 +146,30 @@ export class CreateRecipeComponent implements OnInit {
     }
   }
 
+  // --- Steps FormArray ---
 
+  get steps(): FormArray {
+    return this.recipeForm.get('steps') as FormArray;
+  }
 
-  // --- Image : drag & drop + sélection classique ---
+  private createStepGroup(step?: { id: number; description: string }): FormGroup {
+    return this.fb.group({
+      id: [step?.id ?? null],
+      description: [step?.description ?? '', Validators.required],
+    });
+  }
+
+  addStep(): void {
+    this.steps.push(this.createStepGroup());
+  }
+
+  removeStep(index: number): void {
+    if (this.steps.length > 1) {
+      this.steps.removeAt(index);
+    }
+  }
+
+  // --- Image ---
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
@@ -135,19 +184,14 @@ export class CreateRecipeComponent implements OnInit {
   onDrop(event: DragEvent): void {
     event.preventDefault();
     this.isDragging.set(false);
-
     const file = event.dataTransfer?.files?.[0];
-    if (!file) return;
-
-    this.handleFile(file);
+    if (file) this.handleFile(file);
   }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (!file) return;
-
-    this.handleFile(file);
+    if (file) this.handleFile(file);
   }
 
   private handleFile(file: File): void {
@@ -155,14 +199,12 @@ export class CreateRecipeComponent implements OnInit {
       this.toastService.error('Format invalide', 'Merci de sélectionner une image (JPG, PNG)');
       return;
     }
-
     if (file.size > 5 * 1024 * 1024) {
       this.toastService.error('Fichier trop lourd', 'La taille maximale est de 5 MB');
       return;
     }
 
     this.selectedFile.set(file);
-
     const reader = new FileReader();
     reader.onload = () => this.imagePreview.set(reader.result as string);
     reader.readAsDataURL(file);
@@ -171,6 +213,11 @@ export class CreateRecipeComponent implements OnInit {
   removeImage(): void {
     this.selectedFile.set(null);
     this.imagePreview.set(null);
+    this.existingImageUrl.set(null);
+  }
+
+  get displayImage(): string | null {
+    return this.imagePreview() ?? this.existingImageUrl();
   }
 
   // --- Submit ---
@@ -183,33 +230,40 @@ export class CreateRecipeComponent implements OnInit {
     }
 
     const formValue = this.recipeForm.value;
+
     const payload = {
       title: formValue.title,
       preparationTime: formValue.preparationTime,
       difficulty: formValue.difficulty,
       categoryId: formValue.categoryId,
-      steps: formValue.steps.map((step: { description: string }, index: number) => ({
-        description: step.description,
+      ingredients: formValue.ingredients.map((i: any) => ({
+        id: i.id ?? undefined,
+        name: i.name,
+        quantity: i.quantity,
+        unit: i.unit,
+      })),
+      steps: formValue.steps.map((s: any, index: number) => ({
+        id: s.id ?? undefined,
+        description: s.description,
         stepNumber: index + 1,
       })),
-      ingredients: formValue.ingredients,
     };
 
     this.submitting.set(true);
 
-    this.recipeService.create(payload, this.selectedFile()).subscribe({
+    this.recipeService.update(this.recipeId, payload, this.selectedFile()).subscribe({
       next: (recipe) => {
-        this.toastService.success('Recette créée', `"${recipe.title}" a été ajoutée avec succès`);
+        this.toastService.success('Recette modifiée', `"${recipe.title}" a été mise à jour avec succès`);
         this.router.navigate(['/recipe', recipe.id]);
       },
       error: () => {
         this.submitting.set(false);
-        this.toastService.error('Erreur', 'Impossible de créer la recette. Veuillez réessayer.');
+        this.toastService.error('Erreur', 'Impossible de modifier la recette. Veuillez réessayer.');
       },
     });
   }
 
   onCancel(): void {
-    this.router.navigate(['/']);
+    this.router.navigate(['/recipe', this.recipeId]);
   }
 }

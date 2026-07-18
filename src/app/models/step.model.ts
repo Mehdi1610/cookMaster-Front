@@ -11,3 +11,9 @@ export interface CreateStepPayload {
   description: string;
   stepNumber: number;
 }
+
+export interface UpdateStepPayload {
+  id?: number; 
+  description: string;
+  stepNumber: number;
+}

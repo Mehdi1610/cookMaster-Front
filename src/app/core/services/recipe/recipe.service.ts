@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { CreateRecipePayload, Recipe } from '../../../models/recipe.model';
+import { CreateRecipePayload, Recipe, UpdateRecipePayload } from '../../../models/recipe.model';
 
 @Injectable({
   providedIn: 'root',
@@ -45,4 +45,18 @@ export class RecipeService {
     console.log(formData);
     return this.http.post<Recipe>(`${this.url}/recipe`, formData);
   }
-}
+
+update(id: number, payload: UpdateRecipePayload, file: File | null): Observable<Recipe> {
+  const formData = new FormData();
+
+  formData.append(
+    'recipeDTO',
+    new Blob([JSON.stringify(payload)], { type: 'application/json' })
+  );
+
+  if (file) {
+    formData.append('file', file);
+  }
+
+  return this.http.put<Recipe>(`${this.url}/recipe/${id}/edit`, formData);
+}}

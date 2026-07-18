@@ -6,6 +6,7 @@ import { HomeComponent } from './features/home/home.component';
 import { authGuard } from './core/guards/auth/auth-guard';
 import { noAuthGuard } from './core/guards/no-auth/no-auth-guard';
 import { RecipeInfoComponent } from './components/recipe-info/recipe-info.component';
+import { UpdateRecipeComponent } from './components/update-recipe/update-recipe.component';
 
 export const routes: Routes = [
     {
@@ -34,6 +35,9 @@ export const routes: Routes = [
     },
     {
         path:'recipe/:id', component:RecipeInfoComponent,
+    },
+    {
+        path:'recipe/:id/edit', component:UpdateRecipeComponent,
     },
     { path: '**',
         component: NotFoundComponent
