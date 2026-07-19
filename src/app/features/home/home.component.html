@@ -1,55 +1,39 @@
 <app-nav-tab (tabChange)="onTabChange($event)"></app-nav-tab>
+
 <div class="px-10 sm:px-8 lg:px-16 py-6">
-    @switch (currentTab()) {
-        @case ('my-recipe') {
-            <!--<filter-tool>-->
-            <app-filter-tool (filtersChange)="onFiltersChange($event)"></app-filter-tool>
-            <!-- <recipeCard>-->
-            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @for (recipe of displayedRecipes(); track recipe.id) {
-                <app-recipe-card
-                    [recipe]="recipe"
-                    [categoryName]="categoryName(recipe.categoryId)"
-                    [isFavorite]="favoriteIds().has(recipe.id)"
-                    (favoriteToggle)="onFavoriteToggle($event)"
-                    (cardClick)="onRecipeClick($event)"
-                ></app-recipe-card>
-            }
+  
+  <!-- pour eviter les problemes de placeHolder sur le filtre catégorie plus de destruction du composant -->
+  <div [hidden]="currentTab() === 'create'">
+    
+    <app-filter-tool (filtersChange)="onFiltersChange($event)"></app-filter-tool>
+    
+    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      @for (recipe of displayedRecipes(); track recipe.id) {
+        <app-recipe-card
+          [recipe]="recipe"
+          [categoryName]="categoryName(recipe.categoryId)"
+          [isFavorite]="favoriteIds().has(recipe.id)"
+          (favoriteToggle)="onFavoriteToggle($event)"
+          (cardClick)="onRecipeClick($event)">
+        </app-recipe-card>
+      }
 
-            @if (displayedRecipes().length === 0) {
-                <p class="col-span-full text-center text-gray-500 py-12">
-                    Aucune recette à afficher pour le moment.
-                </p>
-            }
-                    </div>             
-            }
-            @case ('favorite') {
-            <!--<filter-tool>-->
-            <app-filter-tool (filtersChange)="onFiltersChange($event)"></app-filter-tool>
-            <!-- <recipeCard>-->
-            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @for (recipe of displayedRecipes(); track recipe.id) {
-                <app-recipe-card
-                    [recipe]="recipe"
-                    [categoryName]="categoryName(recipe.categoryId)"
-                    [isFavorite]="favoriteIds().has(recipe.id)"
-                    (favoriteToggle)="onFavoriteToggle($event)"
-                    (cardClick)="onRecipeClick($event)"
+      @if (displayedRecipes().length === 0) {
+        <p class="col-span-full text-center text-gray-500 py-12">
+          @if (currentTab() === 'my-recipe') {
+            Aucune recette à afficher pour le moment.
+          } @else {
+            Aucune recette ajoutée aux favoris.
+          }
+        </p>
+      }
+    </div>
 
-                ></app-recipe-card>
-            }
+  </div>
 
-            @if (displayedRecipes().length === 0) {
-                <p class="col-span-full text-center text-gray-500 py-12">
-                    Aucune recette ajouté au favori. 
-                </p>
-            }
-                    </div>             
-            }
 
-        @case ('create') {
-            <!--<recipe-form>-->
-                <app-create-recipe></app-create-recipe>
-            }
-    }
+  @if (currentTab() === 'create') {
+    <app-create-recipe></app-create-recipe>
+  }
+
 </div>

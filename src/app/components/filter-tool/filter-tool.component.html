@@ -2,7 +2,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:flex-wrap gap-4">
 
         <!-- Catégories -->
-        <p-select
+        <p-select class="text-slate-800"
             [options]="categories()"
             [(ngModel)]="selectedCategory"
             (ngModelChange)="onCategoryChange($event)"
@@ -14,24 +14,26 @@
 
         <!-- Difficulté -->
         <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-            <span class="text-sm font-medium text-orange-500 whitespace-nowrap">Difficulté :</span>
+            <span class="flex items-center gap-2 text-sm font-medium text-slate-800 whitespace-nowrap">
+                DIFFICULTÉ :
+            </span>
             <div class="flex flex-wrap items-center gap-2">
-                @for (diff of difficulties; track diff.value) {
-                    <button
-                        type="button"
-                        (click)="toggleDifficulty(diff.value)"
-                        class="px-4 py-1.5 rounded-md text-sm font-medium border transition-colors whitespace-nowrap"
-                        [class.bg-orange-500]="selectedDifficulty() === diff.value"
-                        [class.text-white]="selectedDifficulty() === diff.value"
-                        [class.border-orange-500]="selectedDifficulty() === diff.value"
-                        [class.bg-gray-100]="selectedDifficulty() !== diff.value"
-                        [class.text-gray-600]="selectedDifficulty() !== diff.value"
-                        [class.border-gray-200]="selectedDifficulty() !== diff.value"
-                    >
-                        {{ diff.label }}
-                    </button>
-                }
-            </div>
+                        @for (diff of difficulties; track diff.value) {
+                            <button
+                                type="button"
+                                (click)="toggleDifficulty(diff.value)"
+                                class="px-4 py-1.5 rounded-md text-sm font-medium border transition-colors whitespace-nowrap"
+                                [class.bg-orange-500]="selectedDifficulty() === diff.value"
+                                [class.text-white]="selectedDifficulty() === diff.value"
+                                [class.border-orange-500]="selectedDifficulty() === diff.value"
+                                [class.bg-gray-100]="selectedDifficulty() !== diff.value"
+                                [class.text-slate-600]="selectedDifficulty() !== diff.value"
+                                [class.border-gray-200]="selectedDifficulty() !== diff.value"
+                            >
+                                {{ diff.label }}
+                            </button>
+                        }
+                    </div>
         </div>
 
     </div>

@@ -1,49 +1,67 @@
 <div 
     (click)="onCardClick($event)"
-    class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer">
+    class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 overflow-hidden cursor-pointer flex flex-col h-full">
 
     <!-- Image + bouton favori -->
     <div class="relative">
         <img
+            [src]="defaultImage"
+            (error)="onImageError()"
+            [alt]="recipe.title"
+            class="w-full h-48 object-cover"
+        />
+       <!-- Affiche l'image de la recette 
+        <img
             [src]="displayImageUrl"
             (error)="onImageError()"
             [alt]="recipe.title"
-            class="w-full h-44 object-cover"
+            class="w-full h-48 object-cover"
         />
+       -->
         <button
             type="button"
             (click)="onToggleFavorite($event)"
-            class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-white/90 rounded-lg shadow-sm hover:bg-white transition-colors"
+            class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors"
             [attr.aria-label]="isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'"
         >
             <i
                 class="pi text-sm"
                 [class.pi-heart-fill]="isFavorite"
-                [class.text-orange-500]="isFavorite"
+                [class.text-red-500]="isFavorite"
                 [class.pi-heart]="!isFavorite"
-                [class.text-gray-500]="!isFavorite"
+                [class.text-gray-400]="!isFavorite"
             ></i>
         </button>
     </div>
 
     <!-- Contenu -->
-    <div class="p-4 bg-orange-400">
-        <h3 class="text-base font-semibold text-gray-800 mb-2">{{ recipe.title }}</h3>
+    <div class="p-4 flex flex-col justify-between flex-grow bg-white">
+        <div>
+            <!-- Titre -->
+            <h3 class="text-base font-bold text-slate-700 mb-3 line-clamp-1">
+                {{ recipe.title }}
+            </h3>
 
-        <div class="flex items-center justify-between text-sm text-gray-800 mb-2">
-            <span class="flex items-center gap-1">
-                <i class="pi pi-clock text-xs"></i>
-                {{ recipe.preparationTime }} min
-            </span>
-            <span class="flex items-center gap-1">
-                <i class="pi pi-bolt text-xs"></i>
-                {{ difficultyLabels[recipe.difficulty] }}
-            </span>
+            <!--Temps & Difficulté -->
+            <div class="flex items-center justify-between text-xs text-gray-500 font-medium mb-3">
+                <span class="flex items-center gap-1.5">
+                    <i class="pi pi-clock text-gray-400"></i>
+                    {{ recipe.preparationTime }} min
+                </span>
+                <span class="flex items-center gap-1.5">
+                    <i class="pi pi-chart-bar text-gray-400"></i>
+                    {{ difficultyLabels[recipe.difficulty] }}
+                </span>
+            </div>
         </div>
-        @if (categoryName) {
-            <span class="inline-block text-xs font-medium text-gray-800 bg-gray-200 rounded-full px-3 py-1">
-                {{ categoryName }}
-            </span>
-        }
+
+        <!-- Tag de Catégorie -->
+        <div class="mt-2 pt-2 border-t border-gray-50 flex items-center justify-between">
+            @if (categoryName) {
+                <span class="inline-block text-xs font-medium text-slate-600 bg-gray-100 rounded-full px-2.5 py-1">
+                    {{ categoryName }}
+                </span>
+            }
+        </div>
     </div>
 </div>

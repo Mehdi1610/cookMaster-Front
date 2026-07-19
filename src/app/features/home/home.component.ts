@@ -66,26 +66,30 @@ displayedRecipes = computed(() =>{
 
 ngOnInit(): void {
   this.userService.currentUser$.subscribe((user)=>{
-    if (!user) return;
 
-    this.recipeService.getAll().subscribe((recipes) => {
-      this.allRecipes.set(recipes);
-    });
+    //Important pour charger la home page sans devoir actualiser
+   if (this.authService.isAuthenticated()){
+      this.recipeService.getAll().subscribe((recipes) => {
+            this.allRecipes.set(recipes);
+          });
 
-    
-    this.favoriteService.getAll().subscribe((favorites) => {
-      this.favoriteIds.set(new Set(favorites.map((r) => r.id)));
-    });
+      
+      this.favoriteService.getAll().subscribe((favorites) => {
+        this.favoriteIds.set(new Set(favorites.map((r) => r.id)));
+      });
 
-    this.categoryService.getAll().subscribe((categories) => {
-      const map = new Map(categories.map((c) => [c.id, c.name]));
-      this.categoryNames.set(map);
-    });
+      this.categoryService.getAll().subscribe((categories) => {
+        const map = new Map(categories.map((c) => [c.id, c.name]));
+        this.categoryNames.set(map);
+      });
 
-    this.searchSub = this.filterervice.searchQuery$.subscribe(query => {
-      this.searchQuery.set(query);
-    });
+      this.searchSub = this.filterervice.searchQuery$.subscribe(query => {
+        this.searchQuery.set(query);
+      });
+      }
   });
+
+
   }
 
   onRecipeClick(recipeId: number): void {

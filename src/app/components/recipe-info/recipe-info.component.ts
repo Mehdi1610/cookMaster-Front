@@ -8,6 +8,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { RecipeService } from '../../core/services/recipe/recipe.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-recipe-info',
@@ -53,6 +54,39 @@ export class RecipeInfoComponent implements OnInit{
           })
    
   }
+    constructor(private sanitizer: DomSanitizer) {}
+
+
+    get displayImageUrl(): SafeUrl | null {
+
+      const currentRecipe = this.recipe();
+
+      if(!currentRecipe){
+        return null;
+      }
+      // 1. clean url ( sans espace)
+      let cleanUrl = String(currentRecipe.imageUrl).trim();
+      
+      // 2. retire tout ce qu'il y a avant "http"
+      const httpIndex = cleanUrl.indexOf('http');
+      if (httpIndex !== -1) {
+        cleanUrl = cleanUrl.substring(httpIndex);
+      }
+      
+      // 3. retire les guillemets a la fin
+      cleanUrl = cleanUrl.replace(/["']/g, '');
+
+      return this.sanitizer.bypassSecurityTrustUrl(cleanUrl);
+    }
+
+
+  imageError= signal(false);
+
+  onImageError(): void {
+    this.imageError.set(true);
+  }
+
+
 
   onEditRecipe() {
     const recipe = this.recipe();
