@@ -4,9 +4,10 @@ import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 import { User } from '../../../models/user.models';
 import { JwtToken } from '../../../models/jwt-token.model';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { RegisterRequest } from '../../../models/registerRequest.model';
-
+import { UserResponse } from '../../../models/userResponse.model';
+import { AuthResponse } from '../../../models/authResponse.model';
 const TOKEN_STORAGE_KEY = 'jwtToken';
 
 @Injectable({
@@ -14,10 +15,13 @@ const TOKEN_STORAGE_KEY = 'jwtToken';
 })
 export class AuthService {
 
-  private readonly url = `${environment.apiUrl}`;
-  private readonly httpClient = inject(HttpClient);
-  private readonly router = inject(Router);
-  private jwtToken: JwtToken | null = null;
+
+    private readonly url = `${environment.apiUrl}`;
+    private readonly httpClient = inject(HttpClient);
+    private readonly router = inject(Router);
+    private jwtToken: JwtToken | null = null;
+    private readonly currentUserSubject = new BehaviorSubject<UserResponse | null>(null);
+    public readonly currentUser$: Observable<UserResponse | null> = this.currentUserSubject.asObservable();
 
   constructor(){
     this.loadTokenFromStorage();
@@ -45,15 +49,33 @@ export class AuthService {
   public login(email: string, password: string): Observable<void> {
         const body = { email, password };
 
-        return this.httpClient.post<JwtToken>(`${this.url}/auth/login`, body).pipe(
-            tap((token) => {
-                this.jwtToken = token;
-                this.saveTokenToStorage(token);
-               // this.userService.loadCurrentUser();
+        return this.httpClient.post<AuthResponse>(`${this.url}/auth/login`, body).pipe(
+            tap((response) => {
+                this.jwtToken = {
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      };
+      this.saveTokenToStorage(this.jwtToken);
+      this.currentUserSubject.next(response.user);
             }),
             map(() => void 0),
         );
     }
+
+    public  refresh(): Observable<AuthResponse> {
+        const body = {refreshToken: this.jwtToken?.refreshToken };
+        return this.httpClient.post<AuthResponse>(`${this.url}/auth/refresh`, body).pipe(
+        tap((response) => {
+        this.jwtToken = {
+            accessToken: response.accessToken,
+            refreshToken: response.refreshToken,
+            };
+        this.saveTokenToStorage(this.jwtToken);
+        this.currentUserSubject.next(response.user);
+        })
+
+  );
+}
 
     public getAccessToken(): string | null {
         return this.jwtToken?.accessToken ?? null;
@@ -67,33 +89,20 @@ export class AuthService {
         return this.jwtToken?.refreshToken != null;
     }
 
-    public refreshToken(): Observable<string | null> {
-        const body = { refreshToken: this.jwtToken?.refreshToken };
-
-        return this.httpClient.post<JwtToken>(`${this.url}/refresh`, body).pipe(
-            tap((newToken) => {
-                this.jwtToken = newToken;
-                this.saveTokenToStorage(newToken);
-            }),
-            map((newToken) => newToken.accessToken),
-            catchError((err: HttpErrorResponse) => {
-                console.log(
-                    `Token refresh failed: ${err.message} (Status: ${err.status})`,
-                );
-                this.logout();
-                return of(null);
-            }),
-        );
-    }
     
     public register(registerRequest: RegisterRequest): Observable<User> {
         return this.httpClient.post<User>(`${this.url}/auth/register`, {
             ...registerRequest,
         });
     }
-  public logout(): void {
+  public logout(skipServerCall: boolean = true): void {
+    if(!skipServerCall){
         this.httpClient.post<void>(`${this.url}/logout`, null)
-        .subscribe();
+                .subscribe({
+                    error: () => {},
+                });
+    }
+        
         this.jwtToken = null;
         this.clearTokenFromStorage();
         this.router.navigate(['/auth/login']);

@@ -54,6 +54,7 @@ export class FilterToolComponent implements OnInit{
 
       },
     });
+
   }
 
   onCategoryChange(value: number | null): void{

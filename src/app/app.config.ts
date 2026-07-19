@@ -8,6 +8,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { authInterceptor } from './core/interceptors/auth/auth.interceptor';
+import { noAuthInterceptor } from './core/interceptors/no-auth/no-auth.interceptor-interceptor';
 /*
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -35,7 +36,7 @@ export const appConfig: ApplicationConfig = {
         provideAnimationsAsync(),
         provideRouter(routes),
         provideHttpClient(
-            withInterceptors([authInterceptor]),
+            withInterceptors([authInterceptor, noAuthInterceptor]),
         ),
         providePrimeNG({
             theme: {

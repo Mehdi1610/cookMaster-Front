@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, inject, OnInit, Output, signal, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, OnDestroy, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { User } from '../../models/user.models';
 import { UserService } from '../../core/services/user/user.service';
@@ -13,6 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { ButtonModule } from 'primeng/button';
+import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
+import { FilterService } from '../../core/services/filter/filter.service';
 
 @Component({
   selector: 'app-header',
@@ -28,11 +30,12 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit, OnDestroy{
 
   private readonly router = inject(Router);
   private readonly userService = inject(UserService);
   private readonly authService = inject(AuthService);
+  private readonly filterService = inject(FilterService);
 
 
   @Output() search = new EventEmitter<string>();
@@ -41,28 +44,35 @@ export class HeaderComponent implements OnInit{
   searchControl = new FormControl('');
   mobileSearchOpen = signal(false);
 
+  private searchSub!: Subscription;
+
   ngOnInit(): void {
     this.userService.currentUser$.subscribe({
       next: user => this.user = user,
       error: (err: HttpErrorResponse) => console.log(err)
     });
+
+    // On écoute en temps réel chaque caractère ajouté ou supprimé
+    this.searchSub = this.searchControl.valueChanges.pipe(
+      debounceTime(300),        // Attend 300ms de pause (évite de spammer le filtre à chaque lettre)
+      distinctUntilChanged()    // Ne déclenche le filtre que si le texte a changé
+    ).subscribe(value => {
+      // On envoie la valeur (ou une chaîne vide si null) au service partagé
+      this.filterService.updateSearchQuery(value || '');
+    });
   }
   
 
-   onSearch(): void {
-    const value = this.searchControl.value?.trim() ?? '';
-    if (value) {
-      this.search.emit(value);
-      this.mobileSearchOpen.set(false);
-    }
-  }
+   ngOnDestroy(): void {
+     if(this.searchSub){
+      this.searchSub.unsubscribe();
+     }
+   }
 
   toggleMobileSearch(): void {
     this.mobileSearchOpen.update((open) => !open);
   }
 
-
-  
   logout(): void {
     this.user = null;
     this.authService.logout();
