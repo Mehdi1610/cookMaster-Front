@@ -61,6 +61,8 @@ export class UpdateRecipeComponent implements OnInit {
     { label: 'c. à café', value: 'CAC' },
     { label: 'pièce', value: 'PIECE' },
     { label: 'pincée', value: 'PINCEE' },
+    { label: 'au choix', value: 'AUTRE' },
+
   ];
 
   ngOnInit(): void {
@@ -131,7 +133,7 @@ export class UpdateRecipeComponent implements OnInit {
     return this.fb.group({
       id: [ingredient?.id ?? null],
       name: [ingredient?.name ?? '', Validators.required],
-      quantity: [ingredient?.quantity ?? null, [Validators.required, Validators.min(0.1)]],
+      quantity: [ingredient?.quantity ?? null, [Validators.required]],
       unit: [ingredient?.unit ?? null, Validators.required],
     });
   }

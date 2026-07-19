@@ -1,4 +1,4 @@
-export type Unit= 'G' | 'KG' | 'ML' | 'L' | 'CAS' | 'CAC' | 'PIECE' | 'PINCEE';
+export type Unit= 'G' | 'KG' | 'ML' | 'L' | 'CAS' | 'CAC' | 'PIECE' | 'PINCEE' | 'AUTRE';
 
 
 export interface Ingredient{

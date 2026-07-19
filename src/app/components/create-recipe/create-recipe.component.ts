@@ -55,6 +55,7 @@ export class CreateRecipeComponent implements OnInit {
     { label: 'c. à café', value: 'CAC' },
     { label: 'pièce', value: 'PIECE' },
     { label: 'pincée', value: 'PINCEE' },
+    { label: 'au choix', value: 'AUTRE' },
   ];
 
   ngOnInit(): void {
@@ -103,7 +104,7 @@ export class CreateRecipeComponent implements OnInit {
   private createIngredientGroup(): FormGroup {
     return this.formBuilder.group({
       name: ['', Validators.required],
-      quantity: [null, [Validators.required, Validators.min(0.1)]],
+      quantity: [null, [Validators.required]],
       unit: [null, Validators.required],
     });
   }
