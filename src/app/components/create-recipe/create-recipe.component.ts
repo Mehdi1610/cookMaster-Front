@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { Difficulty } from '../../models/recipe.model';
 import { Unit } from '../../models/ingredient.model';
 import { RecipeService } from '../../core/services/recipe/recipe.service';
 import { CategoryService } from '../../core/services/category/category.service';
+import { HomeTab } from '../nav-tab/nav-tab.component';
 
 @Component({
   selector: 'app-create-recipe',
@@ -39,6 +40,8 @@ export class CreateRecipeComponent implements OnInit {
   selectedFile = signal<File | null>(null);
   submitting = signal(false);
   isDragging = signal(false);
+
+  @Output() tabChange = new EventEmitter<HomeTab>();
 
   difficulties: { label: string; value: Difficulty }[] = [
     { label: 'Facile', value: 'Facile' },
@@ -72,6 +75,13 @@ export class CreateRecipeComponent implements OnInit {
       this.categories.set(categories.map((c) => ({ label: c.name, value: c.id })));
     });
   }
+
+activeTab= signal<HomeTab>('create');
+
+selectTab() {
+this.activeTab.set("my-recipe");
+this.tabChange.emit("my-recipe");
+}
 
   // --- Steps FormArray ---
 
@@ -212,5 +222,6 @@ export class CreateRecipeComponent implements OnInit {
 
   onCancel(): void {
     this.router.navigate(['/']);
+
   }
 }

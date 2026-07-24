@@ -1,7 +1,7 @@
 <header class="w-full bg-white border-b border-gray-200 px-10 sm:px-8 lg:px-16">    <p-toolbar styleClass="border-none shadow-none py-3 bg-white">
 
         <ng-template pTemplate="start">
-            <div class="flex items-center gap-2">
+            <div id="logo" class="flex items-center gap-2" (click)="navigateToHome()" >
                 <img 
                 src="img/chef_food_restaurant__icon.ico" 
                 alt="cookMaster" class="w-7 h-7 object-contain" style="filter: invert(56%) sepia(69%) saturate(1878%) hue-rotate(346deg) brightness(101%) contrast(96%);" />

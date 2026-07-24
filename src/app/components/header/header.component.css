@@ -21,3 +21,7 @@
 :host ::ng-deep .p-button-text.p-button-secondary:hover .p-icon {
   color: #f97316 !important;
 }
+
+#logo:hover{
+cursor: pointer;
+}

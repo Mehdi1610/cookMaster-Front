@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 
 
 export type HomeTab = 'my-recipe' | 'favorite' | 'create';
@@ -26,7 +26,7 @@ tabs: TabItem[]=[
 {id:'create', label:'Créer une Recette'}
 ];
 
-activeTab= signal<HomeTab>('my-recipe');
+@Input() activeTab= signal<HomeTab>('my-recipe');
 
 selectTab(tab: HomeTab) {
 this.activeTab.set(tab);

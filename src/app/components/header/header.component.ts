@@ -15,6 +15,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { ButtonModule } from 'primeng/button';
 import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 import { FilterService } from '../../core/services/filter/filter.service';
+import { HomeTab } from '../nav-tab/nav-tab.component';
 
 @Component({
   selector: 'app-header',
@@ -39,7 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
 
   @Output() search = new EventEmitter<string>();
-  
+
   user: User | null | undefined;
   searchControl = new FormControl('');
   mobileSearchOpen = signal(false);
@@ -61,12 +62,18 @@ export class HeaderComponent implements OnInit, OnDestroy{
       this.filterService.updateSearchQuery(value || '');
     });
   }
+
+  activeTab= signal<HomeTab>(("my-recipe"));
+
+navigateToHome() {
+this.router.navigate(['/'])
+}
   
 
-   ngOnDestroy(): void {
-     if(this.searchSub){
+  ngOnDestroy(): void {
+    if(this.searchSub){
       this.searchSub.unsubscribe();
-     }
+    }
    }
 
   toggleMobileSearch(): void {
@@ -78,5 +85,4 @@ export class HeaderComponent implements OnInit, OnDestroy{
     this.authService.logout();
     this.router.navigate(['/auth/login']);
   }
-
 }

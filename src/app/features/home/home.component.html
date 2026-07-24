@@ -1,4 +1,4 @@
-<app-nav-tab (tabChange)="onTabChange($event)"></app-nav-tab>
+<app-nav-tab [activeTab]="currentTab" (tabChange)="onTabChange($event)"></app-nav-tab>
 
 <div class="px-10 sm:px-8 lg:px-16 py-6">
   
@@ -33,7 +33,7 @@
 
 
   @if (currentTab() === 'create') {
-    <app-create-recipe></app-create-recipe>
+    <app-create-recipe (tabChange)="onTabChange($event)"></app-create-recipe>
   }
 
 </div>
